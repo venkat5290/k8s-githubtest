@@ -1,0 +1,47 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Deploy to Azure AKS
+
+on:
+  push:
+    branches: [ main ]
+    
+  workflow_dispatch:
+  
+env:
+  
+  RESOURCE_GROUP: devops-test
+  CLUSTER_NAME: microservices_test
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  
+  deploy:
+    
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: azure login using cred
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CRED }}
+      
+      - name: Azure Kubernetes set context
+        uses: Azure/aks-set-context@v2.1
+        with:
+          resource-group: ${{env.RESOURCE_GROUP}}
+          cluster-name: ${{CLUSTER_NAME}}
+      - name: Deploy to Kubernetes cluster
+        uses: Azure/k8s-deploy@v3.1
+        with:
+          manifests: |
+            employee.yml
+          
+          action: deploy
+   
+
+          
+      
+      
+      -
