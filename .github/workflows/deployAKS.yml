@@ -26,6 +26,7 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CRED }}
+          allow-no-subscriptions: true
       
       - name: Azure Kubernetes set context
         uses: Azure/aks-set-context@v2.1
